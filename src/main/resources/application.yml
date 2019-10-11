@@ -1,0 +1,45 @@
+server:
+  port: 8331
+
+logging:
+  file: logs/log-service.log
+  level:
+    root: INFO
+    cn.jvtd.mapper: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n"
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://39.96.163.145:3306/login?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: chenhui
+    password: mysql20191010
+
+  redis:
+    cache.clusterNodes: 39.96.163.145:7000,39.96.163.145:7001,39.96.163.145:7002
+    cache.commandTimeout: 5000
+#  jedis :
+#    pool :
+#      host :
+#      port :
+#      config :
+#        maxTotal: 100
+#        maxIdle: 10
+#        maxWaitMillis : 100000
+
+  #国际化配置
+  messages:
+    encoding: UTF-8
+    #basename: i18n/messages
+
+#mybatis:
+#  configuration:
+#    mapUnderscoreToCamelCase: true
+#mybatis相关配置
+mybatis:
+  mapper-locations: classpath:mapper/*Mapper.xml
+  type-aliases-package: cn.jvtd.domain
+  config-location: classpath:mybatis-config.xml
+
