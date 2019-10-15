@@ -35,4 +35,14 @@ public class RedisClientTemplate {
         return str;
     }
 
+    public Object deleteRedis(String key){
+        Long str=null;
+        try {
+            str=jedisClusterConfig.getJedisCluster().del(key);
+        }catch (Exception ex){
+            log.error("getRedis:{Key:"+key+"}",ex);
+        }
+        return str;
+    }
+
 }

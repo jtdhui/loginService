@@ -28,7 +28,7 @@ import java.util.*;
  * 用户登录，忘记密码
  */
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserLoginAction {
     private Log log = LogFactory.getLog(this.getClass());
     @Autowired
@@ -42,6 +42,9 @@ public class UserLoginAction {
 
     @Autowired
     ISysFuncService sysFuncService;
+
+    @Autowired
+    TokenClientUtil tokenClientUtil;
     /**
      * 获取手机验证码
      *
@@ -169,9 +172,12 @@ public class UserLoginAction {
                             List<SysFunc> userRoleAllFuncs = new ArrayList<SysFunc>(userRoleAllFuncMap.values());
                             Collections.sort(userRoleAllFuncs);
                             SysFunc sysFunc= BuildTree.buildTree(userRoleAllFuncs);
+                            int expireTime = 7 * 24 * 3600 * 1000;// 过期时间7天
+                            String userToken = tokenClientUtil.saveAndGetToken(user1, expireTime,"3");
                             Map<String,Object> map=new HashMap<String,Object>();
                             map.put("userInfo",user1);
                             map.put("funcs",sysFunc);
+                            map.put("userToken",userToken);
                             return new ResultBean(ResultConstant.SUCCESS,map);
                         } else {
                             resultBean = ResultBean.createResult("1003", "手机号/密码错误", new JSONObject());
@@ -186,6 +192,21 @@ public class UserLoginAction {
             log.error("查询出错", e);
             resultBean = ResultBean.createResultByException();
         }
+        return resultBean;
+    }
+   /**
+     *
+     *
+     * @param
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/searchUser")
+    @ResponseBody
+    public ResultBean searchUser(@RequestBody AcceptBean acceptData) throws Exception {
+        ResultBean resultBean = null;
+        String version =acceptData.getVersion();
+        Map<String,Object> amap = (HashMap<String,Object>) acceptData.getData();
         return resultBean;
     }
 
